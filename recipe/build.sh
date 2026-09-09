@@ -7,4 +7,4 @@ set -e
 echo "recursive-include gribapi *.so" >> MANIFEST.in
 
 ${PYTHON} builder.py
-${PYTHON} -m pip install . -vv --no-deps
+${PYTHON} -m pip install . -vv --no-deps --no-build-isolation
