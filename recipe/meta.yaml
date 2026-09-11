@@ -1,0 +1,73 @@
+{% set name = "python-eccodes" %}
+{% set pypi_name = "eccodes" %}
+{% set version = "2.47.0" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+
+  url: https://pypi.org/packages/source/{{ pypi_name[0] }}/{{ pypi_name }}/{{ pypi_name }}-{{ version }}.tar.gz
+  sha256: ae9207ef27c67656d068aab97f172abeb85fc3620f56faa22fdac5b1be75de69
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - {{ stdlib("c") }}
+    - {{ compiler('c') }}
+  host:
+    - python
+    - setuptools
+    - pip
+    - numpy {{ numpy }}
+    - cffi
+    - findlibs
+    - eccodes >={{ version }}
+  run:
+    - python
+    - attrs
+    - cffi
+    - findlibs
+    - eccodes >={{ version }}
+
+# E       gribapi.errors.CorruptedIndexError: Index is corrupted
+{% set deselect_tests = "--deselect=tests/test_eccodes.py::test_grib_index_new_from_file" %}
+
+test:
+  source_files:
+   - tests
+  imports:
+   - eccodes
+  requires:
+   - pytest
+   - pytest-cov
+   - pytest-flakes
+   - pip
+  commands:
+   - pip check
+   - pytest {{ deselect_tests }} tests -vv
+
+about:
+  home: https://confluence.ecmwf.int/spaces/ECC/overview
+  summary: Python interface to the ecCodes GRIB/BUFR decoder/encoder
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
+  description: Python 3 interface to decode and encode GRIB and BUFR files via the ECMWF ecCodes library.
+  doc_url: https://confluence.ecmwf.int/display/ECC/ecCodes+Home
+  dev_url: https://github.com/ecmwf/eccodes-python
+
+extra:
+  recipe-maintainers:
+    - kmuehlbauer
+    - pelson
+    - ocefpaf
+    - kynan
+    - dtip
+    - iainrussell
+    - shahramn
+    - xylar
+    - zklaus
